@@ -11,6 +11,8 @@ namespace Web {
 
 	public class MvcApplication : System.Web.HttpApplication {
 		protected void Application_Start() {
+			UnityConfig.Initialise();
+
 			AreaRegistration.RegisterAllAreas();
 
 			WebApiConfig.Register(GlobalConfiguration.Configuration);

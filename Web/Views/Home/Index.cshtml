@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IList<Task>
+@{
 	ViewBag.Title = "Tasks";
 }
 
@@ -41,7 +42,13 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 			var self = this;
 
 			// Page properties
-			self.tasks = ko.observableArray(tasks);
+			ko.mapping.fromJS({ tasks: tasks }, {
+				tasks: {
+					create: function(options) {
+						return new Task(options.data);
+					}
+				}
+			}, self);
 			self.newTaskTitle = ko.observable("");
 
 			// Computed incomplete task list
@@ -67,11 +74,9 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 
 		};
 
-		// Fake data
-		var taskData = [
-			new Task({ id: 1, isComplete: true, title: "Do Groceries" }),
-			new Task({ id: 2, isComplete: true, title: "Pick up dry cleaning" }),
-			new Task({ id: 3, isComplete: false, title: "Fix Jeff Z's code" })];
+
+		// Less Fake data
+		var taskData = @Html.Raw(new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(@Model));
 
 		// Bind the data to the page
 		ko.applyBindings(new TaskPageModel(taskData));

@@ -167,6 +167,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\Api\TasksController.cs" />
     <Compile Include="Hubs\TaskHub.cs" />
+    <Compile Include="Models\CodeFirstEFRepository.cs" />
     <Compile Include="Models\ITaskRepository.cs" />
     <Compile Include="Models\MemoryTaskRepository.cs" />
     <Compile Include="Models\Task.cs" />

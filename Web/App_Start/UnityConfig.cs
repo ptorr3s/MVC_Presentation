@@ -21,7 +21,7 @@ namespace Web {
 		private static IUnityContainer BuildUnityContainer() {
 			var container = new UnityContainer();
 
-			container.RegisterType<ITaskRepository, MemoryTaskRepository>(new ContainerControlledLifetimeManager());
+			container.RegisterType<ITaskRepository, CodeFirstEFRepository>(new ContainerControlledLifetimeManager());
 			container.RegisterType<ITaskRepositoryUpdateConsumer, HubTaskUpdateConsumer>(new ContainerControlledLifetimeManager());
 
 			return container;

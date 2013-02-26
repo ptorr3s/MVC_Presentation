@@ -59,3 +59,11 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+
+.deleteButton {
+	cursor: pointer;
+}
+
+	.deleteButton:hover {
+		color: red;
+	}

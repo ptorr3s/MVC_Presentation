@@ -5,12 +5,24 @@
 <h1>@ViewBag.Title</h1>
 
 <ol data-bind="foreach: tasks">
-	 <li><label>
-				<input type="checkbox" data-bind="checked: isComplete" />
-				<span data-bind="text: title"></span>
-		  </label>
-	 </li>
+	<li>
+		<label>
+			<input type="checkbox" data-bind="checked: isComplete" />
+			<span data-bind="text: title"></span>
+		</label>
+		<a class="deleteButton" data-bind="click: $parent.removeTask">&nbsp;✗&nbsp;</a>
+	</li>
 </ol>
+
+<div data-bind="if: incompleteTasks().length > 0">
+	 There are <span data-bind="text: incompleteTasks().length"></span> incomplete tasks.
+</div>
+
+<hr />
+
+<h2>New Task (#<span data-bind="text: tasks().length + 1"></span>)</h2>
+Title: <input type="text" data-bind="value: newTaskTitle" />
+<button data-bind="click: addTask">Add</button>
 
 @section scripts {
 	<script type="text/javascript">
@@ -20,13 +32,39 @@
 			var self = this;
 
 			self.id = data.id;
-			self.isComplete = data.isComplete;
-			self.title = data.title;
+			self.isComplete = ko.observable(data.isComplete);
+			self.title = ko.observable(data.title);
 		};
 
 		// Define a model for the page
 		var TaskPageModel = function (tasks) {
-			this.tasks = tasks;
+			var self = this;
+
+			// Page properties
+			self.tasks = ko.observableArray(tasks);
+			self.newTaskTitle = ko.observable("");
+
+			// Computed incomplete task list
+			this.incompleteTasks = ko.computed(function () {
+				return ko.utils.arrayFilter(self.tasks(), function (task) {
+					return !task.isComplete();
+				});
+			});
+
+			self.addTask = function () {
+				if (self.newTaskTitle().trim() == "")
+					return;
+
+				var newTask = new Task({ id: self.tasks().length + 1, isComplete: false, title: self.newTaskTitle() });
+
+				self.tasks.push(newTask);
+				self.newTaskTitle("");
+			};
+
+			self.removeTask = function (task) {
+				self.tasks.remove(task);
+			};
+
 		};
 
 		// Fake data

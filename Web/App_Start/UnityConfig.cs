@@ -2,6 +2,8 @@ using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using MVC_Presentation.Models;
 using System.Web.Http;
+using Microsoft.AspNet.SignalR;
+using MVC_Presentation.Hubs;
 
 namespace Web {
 	public static class UnityConfig {
@@ -11,6 +13,7 @@ namespace Web {
 
 			DependencyResolver.SetResolver(new Unity.Mvc4.UnityDependencyResolver(container));
 			GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
+			GlobalHost.DependencyResolver = new Unity.SignalR.UnityDependencyResolver(container);
 
 			return container;
 		}
@@ -19,6 +22,7 @@ namespace Web {
 			var container = new UnityContainer();
 
 			container.RegisterType<ITaskRepository, MemoryTaskRepository>(new ContainerControlledLifetimeManager());
+			container.RegisterType<ITaskRepositoryUpdateConsumer, HubTaskUpdateConsumer>(new ContainerControlledLifetimeManager());
 
 			return container;
 		}

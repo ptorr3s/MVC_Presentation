@@ -5,6 +5,10 @@ using System.Text;
 
 namespace MVC_Presentation.Models {
 
+	public interface ITaskRepositoryUpdateConsumer {
+		void TasksUpdated();
+	}
+
 	public interface ITaskRepository {
 
 		IEnumerable<Task> GetAll();

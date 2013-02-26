@@ -70,6 +70,15 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 
 		};
 
+		// Return a jQuery promise for the task list by WebApi
+		Task.fetchAll = function () {
+			return $.ajax({
+				type: 'GET',
+				url: serviceUrl,
+				contentType: "application/json; charset=utf-8"
+			});
+		}
+
 		// Define a model for the page
 		var TaskPageModel = function (tasks) {
 			var self = this;
@@ -91,6 +100,13 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 				});
 			});
 
+			// Monitor for task list changes with signalr
+			$.connection.tasks.client.updated = function() {
+				Task.fetchAll().done(function(data) {
+					ko.mapping.fromJS({tasks: data}, self);
+				});
+			}
+
 			self.addTask = function () {
 				if (self.newTaskTitle().trim() == "")
 					return;
@@ -109,6 +125,8 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 
 		};
 
+		// Connect to the service, and allow listening for messages.
+		$.connection.hub.start();
 
 		// Less Fake data
 		var taskData = @Html.Raw(new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(@Model));

@@ -1,0 +1,919 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title>MVC Presentation</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
+	<script type="text/javascript">
+		$(function () {
+			// Create TOC
+			var div = $("<div style='display: none;' class='agenda'><h1>Agenda</h1><ul></ul></div>");
+			$("body > div > h1, body > div > h2, body > div > h3").each(function () {
+				div.find("ul").append("<li><a class='toclink'>" + $(this)[0].outerHTML + "</a></li>");
+			});
+			$("body").prepend(div);
+
+			// Hide everything and add nav
+			$("body > div")
+				.hide()
+				.first()
+					.append("<p class='nav'><a class='next'>Next</a> | <a class='toc'>TOC</a></p>")
+					.end()
+				.last()
+					.append("<p class='nav'><a class='back'>Back</a> | <a class='toc'>TOC</a></p>")
+					.end()
+				.not(":first,:last")
+					.append("<p class='nav'><a class='back'>Back</a> | <a class='next'>Next</a> | <a class='toc'>TOC</a></p>");
+
+			var showMatchingDiv = function (header_text) {
+				$("body > div").each(function () {
+					var div = $("body > div").first();
+					if ($(this).children("h1,h2,h3").first().text() == header_text) {
+						div = $(this);
+					}
+					if (!div.is(":visible")) {
+						$("*").stop(true, true);
+						$("body > div:visible").fadeToggle(750);
+						div.fadeToggle(750);
+					}
+				});
+			};
+
+			// Show toc
+			$("body > div").first().show();
+
+			// Events
+
+			$(".back").click(function () {
+				$("*").stop(true, true);
+				$(this)
+					.closest("div")
+						.fadeToggle(750)
+						.prev()
+							.fadeToggle(750);
+			});
+
+			$(".next").click(function () {
+				$("*").stop(true, true);
+				$(this)
+					.closest("div")
+						.fadeToggle(750)
+						.next()
+							.fadeToggle(750);
+			});
+
+			$(".toc").click(function () {
+				$("*").stop(true, true);
+				$(this)
+					.closest("div")
+						.fadeToggle(750);
+				$("body > div").first().fadeToggle(750);
+			});
+
+			$(".toclink").click(function () {
+				showMatchingDiv($(this).text());
+			});
+
+			// Nav with keys
+			$(document).keydown(function (e) {
+				$("*").stop(true, true);
+				if (e.keyCode == 37) {
+					$(".back:visible").click();
+					return false;
+				} else if (e.keyCode == 39) {
+					$(".next:visible").click();
+				}
+			});
+		});
+	</script>
+	<style>
+		body {
+			height: 100%;
+			font-size: 2em;
+			margin: 0;
+			padding: 0px;
+		}
+
+		div {
+			display: block;
+			position: absolute;
+			overflow-y: scroll;
+			width: auto;
+			height: auto;
+			left: 20px;
+			right: 0;
+			bottom: 0;
+			top: 0;
+		}
+
+		.nav {
+			display: block;
+			position: fixed;
+			text-align: right;
+			z-index: 100;
+			margin: 0px 30px 0px 0px;
+			padding: 10px;
+			background-color: white;
+			right: 0;
+			bottom: 0;
+		}
+
+		a {
+			cursor: pointer;
+			color: blue;
+		}
+
+		h1, h2, h3 {
+			font-size: 1.5em;
+			margin-bottom: 10px;
+			padding-bottom: 10px;
+		}
+
+		.agenda ul {
+			list-style: none;
+		}
+
+		a h1 {
+			display: inline;
+			font-size: 1em;
+			text-decoration: underline;
+		}
+
+		a h2 {
+			display: inline;
+			font-size: .8em;
+			margin-left: 40px;
+		}
+
+		a h3 {
+			display: inline;
+			font-size: .7em;
+			margin-left: 80px;
+		}
+
+		pre {
+			font-size: .5em;
+			padding-left: 20px;
+			margin-right: 25%;
+		}
+	</style>
+</head>
+<body onload="">
+	<div>
+		<h1>First Thing's First</h1>
+		<ul>
+			<li>This cannot be a venue for discussion. There is too much material, and too little time. </li>
+			<li>However... requests for clarification are welcome.</li>
+			<li>There should be time left for general questions.</li>
+			<li>This will be posted to Klick's Google+.</li>
+			<li>Everything is in Git! You can have it all!</li>
+		</ul>
+	</div>
+	<div>
+		<h1>Purpose - Why are we here?</h1>
+		<ul>
+			<li>We picked MVC, but what does that mean? What's next?</li>
+			<li>Drive interest more efficient and engaging development, focus on the future.</li>
+			<li>Technology showcase, show what is out there.</li>
+			<li>See the big picture, make better decisions.</li>
+			<li>Sammiches.</li>
+		</ul>
+	</div>
+	<div>
+		<h1>Set our initial branch</h1>
+		<a href="runapp:setbranch Initial">Make my branch: Initial</a>
+	</div>
+	<div>
+		<h1>Tools</h1>
+		We will be using:
+		<ul>
+			<li>Visual Studio 2012 Express</li>
+			<li>Nuget (Built into Visual Studio)</li>
+			<li>Git</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Visual Studio 2012 Express</h2>
+		<ul>
+			<li>Promote integrated development workflow, rapid development</li>
+			<li>Best tool for the job. Editors suck, it's not an editor.</li>
+			<li>If you're not using it, you should be.</li>
+			<li>Ok. I'm done.</li>
+		</ul>
+		<ul>
+			<li>Many more features have been included from the Professional edition:
+				<ul>
+					<li>Better debugging</li>
+					<li>Unit testing / test runner</li>
+					<li><a href="http://blogs.msdn.com/b/codeanalysis/archive/2012/03/09/what-s-new-in-code-analysis-for-visual-studio-11.aspx">Code Analysis</a></li>
+				</ul>
+			</li>
+		</ul>
+		<p>
+			<a href="http://www.microsoft.com/visualstudio/eng/downloads">Download Visual Studio 2012 Express and MVC 4</a>
+		</p>
+	</div>
+	<div>
+		<h2>Nuget</h2>
+		<ul>
+			<li>Package management suite</li>
+			<li>Installed with VS 2012</li>
+			<li>Supports local (directory) as well as hosted repositories</li>
+			<li>Klick will be hosting our own internal repository</li>
+		</ul>
+		<a href="http://nuget.org/">Learn about Nuget</a>
+	</div>
+	<div>
+		<h2>Git VS Extension</h2>
+		<ul>
+			<li>It's actually a "Team Foundation" extension</li>
+			<li>Doesn't require git to be installed</li>
+			<li>Nice integration, bit of a pain to install</li>
+		</ul>
+		You need both of these:
+		<p>
+			<a href="http://www.microsoft.com/en-us/download/details.aspx?id=36539">Visual Studio 2012 Update 2 CTP 3</a><br />
+			<a href="http://visualstudiogallery.msdn.microsoft.com/abafc7d6-dcaa-40f4-8a5e-d6724bdb980c">Visual Studio Tools for Git</a><br />
+		</p>
+	</div>
+	<div>
+		<h1>Brief MVC Review</h1>
+		<ul>
+			<li>Routes</li>
+			<li>Controllers</li>
+			<li>Actions and ActionResults</li>
+			<li>ViewResult</li>
+			<li>ActionFilters</li>
+			<li>Extensibility Points</li>
+		</ul>
+		<a href="http://www.asp.net/posters/web-api/ASP.NET-Web-API-Poster.pdf">Request lifecycle</a>
+	</div>
+	<div>
+		<h2>Routes</h2>
+		<a href="http://www.dotnetcurry.com/ShowArticle.aspx?ID=814">Routing article</a>
+		<pre class="prettyprint">
+
+public class RouteConfig
+{
+	public static void RegisterRoutes(RouteCollection routes)
+	{
+		routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+		routes.MapRoute(
+				name: "Default",
+				url: "{controller}/{action}/{id}",
+				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+		);
+	}
+}
+
+		</pre>
+		<ul>
+			<li>First step is locating the controller to execute</li>
+			<li>Configured from the Application_Start event, in the Global.asax.cs file usually in site root</li>
+			<li>Supports contraints</li>
+			<li>Resolves to an HttpHandler, can run anything, doesn't have to be MVC Controllers</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Controllers</h2>
+		<pre class="prettyprint">
+
+public class HomeController : Controller {
+	//
+	// GET: /Home/
+	public ActionResult Index() {
+		return View();
+	}
+}
+		</pre>
+		<ul>
+			<li>Any class that extends the base MVC Controller can be used</li>
+			<li>WebApi, etc. use their own controller types that are executed differently</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Actions and ActionResults</h2>
+		<pre class="prettyprint">
+
+public ActionResult SpeakGibberish() {
+	return new ContentResult() {
+		ContentType = "text/whacky",
+		Content = "laksjdflahsefhlaskdnvlajshngljkasfkasdf"
+	};
+}
+		</pre>
+		<ul>
+			<li>An action is a method on a Controller class</li>
+			<li>Located by the {action} property of the route (default controller factory)</li>
+			<li>Executed by the Controller base class's ActionInvoker, can be overriden.</li>
+			<li>Result of an action should be an ActionResult (doesn't really have to be, but don't do something differennt.)</li>
+		</ul>
+	</div>
+	<div>
+		<h2>ViewResult</h2>
+		<pre class="prettyprint">
+
+public ActionResult Index() {
+	return View("viewName", (object)viewModel);
+}
+
+		</pre>
+		<ul>
+			<li>Returned by an action.</li>
+			<li>One type of ActionResult, there are many.</li>
+			<li>Can create custom ActionResults, just a class that has an ExecuteResult() method for rendering to the client.</li>
+			<li>This will most likely be a Razor view.</li>
+		</ul>
+		<a href="http://stackoverflow.com/questions/1451319/asp-net-mvc-view-engine-comparison">View engine comparison</a>
+	</div>
+	<div>
+		<h3>Razor</h3>
+		<ul>
+			<li>Default / standard view engine</li>
+			<li>Inherits from a view base class, you can add inherit and make your own, add extensions, etc.</li>
+			<li>Quick reference <a href="http://haacked.com/archive/2011/01/06/razor-syntax-quick-reference.aspx">here</a></li>
+		</ul>
+	</div>
+	<div>
+		<h2>ActionFilters</h2>
+		<ul>
+			<li>Run before or after action execution</li>
+			<li>May prevent an action from executing.</li>
+			<li>Can be applied globally, often in the Application_Start</li>
+			<li>Used for error handling, logging, etc. if applied globally<br />
+				<pre class="prettyprint">
+public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+{
+   filters.Add(new HandleErrorAttribute());
+}
+				</pre>
+			</li>
+			<li>Used for Authorization or caching on an action or controller level with tags.<br />
+				<pre class="prettyprint">
+[Authorize]
+public class HomeController : Controller {
+
+	[OutputCache(Duration = 10)]
+	public ActionResult Index() {
+		return View();
+	}
+
+}
+				</pre>
+			</li>
+			<li><a href="http://www.asp.net/mvc/tutorials/older-versions/controllers-and-routing/understanding-action-filters-cs">More info</a></li>
+		</ul>
+	</div>
+	<div>
+		<h2>Extensibility Points</h2>
+		<ul>
+			<li>There are ways to extend MVC...</li>
+		</ul>
+		<a href="http://codeclimber.net.nz/archive/2009/04/08/13-asp.net-mvc-extensibility-points-you-have-to-know.aspx">13 Extensibility points of MVC</a>
+	</div>
+	<div>
+		<h1>SmartSite Compared</h1>
+		<ul>
+			<li>Similarities</li>
+			<li>Differences</li>
+			<li>Converting SmartSite to MVC</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Similarities</h2>
+		<ul>
+			<li>Both are MVC</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Differences</h2>
+		<ul>
+			<li>Auth</li>
+			<li>SmartSite executes a controller action for each View/Partial (Render() call)</li>
+			<li>SmartSite layouts execute actions</li>
+			<li>Error Handling in SmartSite is tightly coupled with the ControllerManager (ControllerFactory?)</li>
+			<li>Some utilities are quite different
+				<ul>
+					<li>Tracing</li>
+					<li>GA Glue/Magic</li>
+					<li>Mail</li>
+					<li>Exception handling</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Converting SmartSite to MVC</h2>
+		<p>
+			Probably not as crazy as you might think...
+		</p>
+	</div>
+	<div>
+		<h3>Points to address</h3>
+		<ul>
+			<li>Interdependant classes</li>
+			<li>HttpContext is used everywhere. Big problem for testing.</li>
+			<li>Controllers / Views are tied, like web forms</li>
+			<li>Layouts and Render() calls will have to be refactored</li>
+			<li>View formats are different</li>
+			<li>Controllers are very different</li>
+		</ul>
+
+		<a href="runapp:SmartSite_MVC_Converter">View conversion tool</a>
+
+		<ul>
+			<li>Update .NET version</li>
+			<li>Auto-convert the views</li>
+			<li>Stub controller / view references under new vew/controller base classes</li>
+			<li>Remove smartsite and utility code references (quite difficult)</li>
+			<li>Refactor the layout, GA, mail, etc.</li>
+		</ul>
+		Or at least, step one:
+		<ul>
+			<li>Tom Anderson updated Synapse w/ WebApi and routing.</li>
+		</ul>
+	</div>
+	<div>
+		<h1>Javascript Frameworks</h1>
+
+		<p>
+			Often referred to as MV* to mean either:
+			<ul>
+				<li>MVP = Model View Presenter</li>
+				<li>MVVM = Model, View, View Model</li>
+			</ul>
+		</p>
+		<p>
+			We're going to look at 4:
+		</p>
+		<ul>
+			<li>Backbone</li>
+			<li>Ember</li>
+			<li>Angular</li>
+			<li>Knockout</li>
+		</ul>
+		<p>
+			There are <em>SO</em> many!<br />
+			<a href="http://codebrief.com/2012/01/the-top-10-javascript-mvc-frameworks-reviewed/">Nice Summary</a><br />
+			<a href="http://addyosmani.github.com/todomvc/">TODO MVC examples, amazing!</a>
+
+		</p>
+	</div>
+	<div>
+		<h2>Backbone.js</h2>
+
+		<a href="http://backbonejs.org/">Main Site</a>
+
+		<ul>
+			<li>Not actually released yet. Current version:  Release candidate 0.9.10</li>
+			<li><a href="http://arturadib.com/hello-backbonejs/">Tutorial 1</a></li>
+			<li><a href="http://backbonetutorials.com/">Tutorial 2</a></li>
+		</ul>
+		<p>
+			Notes:
+			<ul>
+				<li>Seems like somewhat better organized jQuery</li>
+				<li>Lacks ui bindings / Lots of hand coded stuff / Glue coded</li>
+				<li>Has a route utility, but seems more suited to single pages. (Leaky events)</li>
+				<li>Render() method to produce output, not pleasant to look at.</li>
+				<li>Template engine is Underscore.js / Mixes JS w/ presentation, Ugly</li>
+			</ul>
+		</p>
+	</div>
+	<div>
+		<h3>Backbone.js - Outline</h3>
+
+		<ol>
+			<li>Define models
+				<pre class="prettyprint">
+
+var ThingModel = Backbone.Model.extend({ defaults: { ... fields ... } });
+var ThingList = Backbone.Collection.extend({ model: ThingModel });
+				</pre>
+			</li>
+			<li>Define views
+				<pre class="prettyprint">
+
+var ThingView = Backbone.View.extend({
+		tagName: 'p' || el: $('something'),
+		render: function() { ... work w/ this.el ... }
+});
+				</pre>
+			</li>
+			<li>Create view
+				<pre class="prettyprint">
+
+var thingView = new ThingView();
+				</pre>
+			</li>
+
+		</ol>
+	</div>
+	<div>
+		<h2>Ember.js</h2>
+
+		<a href="http://emberjs.com/">Main Site</a>
+
+		<p>
+			Notes:
+			<ul>
+				<li>Newer / From SproutCore 2.0</li>
+				<li>MVC w/ Routing (not optional), seems single page application targeted</li>
+				<li>Handlebars view engine {{ }}</li>
+				<li>Ember Data - Magic Restful api hook up</li>
+				<li><a href="https://github.com/Myslik/csharp-ember-handlebars">Server side handlebars compile</a></li>
+				<li>Very good nesting of controllers / views</li>
+			</ul>
+		</p>
+	</div>
+	<div>
+		<h3>Ember.js - Outline</h3>
+
+		<ol>
+			<li>Create application reference in global space, bind once to user events
+				<pre class="prettyprint">
+
+App = Ember.Application.create();
+				</pre>
+			</li>
+			<li>Define views, must have an ApplicationView, views respond to user events, context property is linked to templates
+				<pre class="prettyprint">
+
+App.ApplicationView = Ember.View.extend({
+	templateName: 'application'
+});
+				</pre>
+			</li>
+			<li>Define a controller, handles state and view transitions, application view context automatically set to application controller
+				<pre class="prettyprint">
+
+App.ApplicationController = Ember.Controller.extend( { name: 'testapp' });
+				</pre>
+			</li>
+
+			<li>Define a template, lots of plugins to generate links, etc from within {{tags}}
+				<pre class="prettyprint">
+
+&lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;application&quot;&gt;
+		Application name: {{name}} 
+&lt;/script&gt;
+				</pre>
+			</li>
+			<li>Define a Router, and Routes (nested of course, each route extends the url segment up to that point)
+				<pre class="prettyprint">
+
+App.Router = Ember.Router.extend({
+	root: Ember.Route.extend({
+		index: Ember.Route.extend({
+		route: '/'
+		})
+	})
+});
+				</pre>
+			</li>
+		</ol>
+	</div>
+	<div>
+		<h2>Angular.js</h2>
+
+		<a href="http://angularjs.org/">Main Site</a>
+
+		<ul>
+			<li>Dependency injection oriented. Very enterprise...eey...</li>
+			<li><a href="http://net.tutsplus.com/tutorials/javascript-ajax/3-reasons-to-choose-angularjs-for-your-next-project/">Short Overview</a></li>
+			<li><a href="http://docs.angularjs.org/tutorial">Tutorial</a></li>
+		</ul>
+
+		<p>
+			Notes:
+			<ul>
+				<li>Developed by Google</li>
+				<li>Template and html are well integrated, creates extremely simple UI binding</li>
+				<li>No dependencies, not even jQuery</li>
+				<li>Heavily Dependency Injection / Unit test oriented</li>
+				<li>Great documentation</li>
+				<li>Nesting / Composing views not so good.</li>
+				<li><a href="http://pivotal.github.com/jasmine/">Jasmine for unit tests</a>
+					<ul>
+						<li>Can imbed a runner into html file.</li>
+						<li><a href="http://testacular.github.com/0.6.0/index.html">Testacular</a>, also made by the Angular team
+							<ul>
+								<li>Node.js based server</li>
+								<li>Auto run on file changes in any browser, including mobile.</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</p>
+	</div>
+	<div>
+		<h3>Angular.js - Outline</h3>
+
+		<ol>
+			<li>Mark where angular should consider the root of the app, can be anywhere, this bootstraps all the magic.
+				<pre class="prettyprint">
+
+&lt;html ng-app&gt;... &lt;/html&gt;
+				</pre>
+			</li>
+			<li>Mark tags with ng-controller that you want to associate with a javascript class / controller. Same name.
+				<pre class="prettyprint">
+
+&lt;body ng-controller=&quot;MyPageCtrl&quot;&gt;... &lt;/body&gt;
+				</pre>
+			</li>
+			<li>Declare a controller that will bridge the view and model, the dependency injector sets the parameters
+				<pre class="prettyprint">
+
+function MyPageCtrl($scope) {
+	$scope.somedata = { 'a' : 123, 'b' : 456 };
+}
+				</pre>
+			</li>
+	</div>
+	<div>
+		<h2>Knockout.js</h2>
+
+		<a href="http://knockoutjs.com/">Main Site</a>
+
+		<ul>
+			<li>Stays out of your way, only does UI binding.</li>
+			<li><a href="http://learn.knockoutjs.com/">Amazing Tutorials!</a></li>
+		</ul>
+
+		<p>
+			Notes:
+			<ul>
+				<li>Very easy to get started with</li>
+				<li>Integrates templates and html, uses the default jQuery templating</li>
+				<li>Simplest of the frameworks</li>
+				<li>Somewhat obtuse model syntax, but pretty easy to follow</li>
+				<li>Uses 'binders' that bi-directionally convert view to model</li>
+			</ul>
+		</p>
+	</div>
+	<div>
+		<h3>Knockout.js - Outline</h3>
+
+		<ol>
+			<li>Put something that needs binding in the page, and bind its properties with data-bind
+				<pre class="prettyprint">
+
+&lt;input type=&quot;checkbox&quot; data-bind=&quot;checked: shouldBeChecked&quot; /&gt;
+				</pre>
+			</li>
+			<li>Make some type of controller/model object that uses ko 'observables'
+				<pre class="prettyprint">
+
+function ModelThing() {
+	this.shouldBeChecked = ko.observable(false);
+}
+				</pre>
+			</li>
+			<li>Tell Knockout to bind the page, when the model changes the ui updates, when the ui changes the model updates.
+				<pre class="prettyprint">
+
+ko.applyBindings(new ModelThing())
+				</pre>
+			</li>
+		</ol>
+	</div>
+	<div>
+		<h1>Code!!!</h1>
+		They even pay me to do it.
+	</div>
+	<div>
+		<h2>Basic MVC Site</h2>
+		<a href="runapp:setbranch BasicSite">Make my branch: BasicSite</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li>Global.asax and App_Start/*.cs</li>
+					<li>Content</li>
+					<li>Controllers</li>
+					<li>Scripts</li>
+					<li>Views</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Knockout Bound Task List</h2>
+		<a href="runapp:setbranch BasicTaskList">Make my branch: BasicTaskList</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li>Create a Knockout bundle</li>
+					<li>Add the bundle to the layout</li>
+					<li>Create the index file</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Better, Editable List</h2>
+		<a href="runapp:setbranch EditableTaskList">Make my branch: EditableTaskList</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li>Add create/update/delete to list model</li>
+					<li>Computed values for 'incomplete' tasks</li>
+					<li>Conditional warning</li>
+					<li>Lots of crossing concerns...</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>List built from model passed by controller </h2>
+		<a href="runapp:setbranch ControllerModelList">Make my branch: ControllerModelList</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li>Add Task model class</li>
+					<li>Set typed model in the view and use that to populate the initial list</li>
+					<li>Use ko.mapping to provide automatic observables</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Unity</h2>
+		<ul>
+			<li><a href="http://unity.codeplex.com/">Found Here</a></li>
+			<li>IoC - Inversion of control container</li>
+			<li>Remove strict dependency, make testing easy</li>
+			<li>DependencyResolvers added for MVC / WebApi / SignalR</li>
+		</ul>
+	</div>
+	<div>
+		<h2>List from repository, with Unity IoCC</h2>
+		<a href="runapp:setbranch RepositoryMemoryList">Make my branch: RepositoryMemoryList</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li>Moved the static list in the controller to an irepository</li>
+					<li>Implemented an in memory version of irepository</li>
+					<li>Enabled dependency injection in the controller to resolve list at runtime, not compile time</li>
+					<li>Packages added for unity.</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>WebApi Repository List</h2>
+		<a href="runapp:setbranch WebApiRepositoryList">Make my branch: WebApiRepositoryList</a>
+		<ul>
+			<li>Web API <a href="http://www.asp.net/web-api">Found Here</a>
+				<ul>
+					<li><a href="http://www.asp.net/posters/web-api/ASP.NET-Web-API-Poster.pdf">Poster</a></li>
+					<li>Uses MapHttpRoute instead of MapRoute, and locates action name by Http method</li>
+					<li>The four main HTTP methods (GET, PUT, POST, and DELETE) can be mapped to CRUD operations.</li>
+					<ul>
+						<li>GET retrieves</li>
+						<li>PUT updates</li>
+						<li>POST creates a new resource</li>
+						<li>DELETE deletes a resource</li>
+						<li>Other supported, PATCH partial update</li>
+					</ul>
+				</ul>
+			</li>
+			<li>Important Stuff
+				<ul>
+					<li>New WebApi controller (new action mapping!)</li>
+					<li>Update the task with ajax requests to send updates</li>
+					<li>Another Dependency Resolver for WebApi, W00t!</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>SignalR enabled list</h2>
+		<a href="runapp:setbranch SignalRTaskList">Make my branch: SignalRTaskList</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li><a href="http://signalr.net/">Found Here</a></li>
+					<li>Socket / long polling</li>
+					<li>Server to client</li>
+					<li>Added SignalR Nuget</li>
+					<li>Added SignalR jQuery JS to bundle</li>
+					<li>Added Unity Dependency Resolver for SignalR</li>
+					<li>New Task 'Hub' for comms</li>
+					<li>New Task Update Consumer interface, consumed by the hub</li>
+					<li>Layout updated to pull the signalr dynamic js</li>
+					<li>Updated task list to be aware of changes elsewhere... neat...</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h1>Persistence Frameworks / ORM</h1>
+		<ul>
+			<li>Entity Framework
+				<ul>
+					<li><a href="http://msdn.microsoft.com/en-us/data/ef.aspx">Here</a></li>
+					<li>Microsoft's ORM</li>
+					<li>Very mature</li>
+					<li>Extremely feature rich</li>
+					<li>Good integration with sql server, something else if you're lucky.</li>
+				</ul>
+			</li>
+			<li>Dapper
+				<ul>
+					<li><a href="https://code.google.com/p/dapper-dot-net/">Here</a></li>
+					<li>Limited mapping tool, focused on speed, not features</li>
+					<li>Easy to pick up and use, simple syntax (although non-standard, no expression trees, etc.)</li>
+					<li>Perfect for reading data for reports, or simple site usage.</li>
+				</ul>
+			</li>
+			<li>Automodel
+				<ul>
+					<li>Database first only, limited mapping (1 to 1 only, breaks when keys are missing)</li>
+					<li>Depricated.</li>
+				</ul>
+			</li>
+			<li>NHibernate
+				<ul>
+					<li>Fork of java's Hibernate</li>
+					<li>Similar in goals to EF</li>
+				</ul>
+			</li>
+			<li>RavenDB
+				<ul>
+					<li>Document based database</li>
+					<li>Built in .NET</li>
+					<li>Magic serialization of your <em>actual</em> objects</li>
+					<li>Not type restricted</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Entity Framework</h2>
+		<ul>
+			<a href="runapp:setbranch EntityFrameworkCodeFirst">Make my branch: EntityFrameworkCodeFirst</a>
+			<ul>
+				<li>Important Stuff
+					<ul>
+						<li>Code first means that the ORM makes the tables and keeps them up to date</li>
+						<li>Can manage migrations</li>
+						<li>Reated a CodeFirstEFRepository and set the injector to point to it.</li>
+					</ul>
+				</li>
+			</ul>
+		</ul>
+	</div>
+	<div>
+		<h2>Dapper</h2>
+			<a href="runapp:setbranch DapperFramework">Make my branch: DapperFramework</a>
+		<ul>
+			<li>Important Stuff
+				<ul>
+					<li>Super simple</li>
+					<li>Impossible with reasonable unit tests.</li>
+					<li>Super simple</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Stuff I would have liked to get to</h2>
+		<ul>
+			<li>In no particular order...
+				<ul>
+					<li>Dotless
+						<ul>
+							<li>Better css syntax, composition, etc.</li>
+						</ul>
+					</li>
+					<li>CoffeeScript
+						<ul>
+							<li>Simpler, checked javascript.</li>
+						</ul>
+					</li>
+					<li>Error Handling / Elmah
+						<ul>
+							<li>Replace rescuer. Adds all kinds of cool features.</li>
+						</ul>
+					</li>
+					<li>Tracing / log4net
+						<ul>
+							<li>Lots of options, very flexible</li>
+						</ul>
+					</li>
+					<li>Jasmine
+						<ul>
+							<li>javascript testing. I love unit tests, don't you, Jeff?</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

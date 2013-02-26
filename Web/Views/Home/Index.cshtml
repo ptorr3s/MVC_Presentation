@@ -1,1 +1,41 @@
-﻿This is an empty page.
+﻿@{
+	ViewBag.Title = "Tasks";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<ol data-bind="foreach: tasks">
+	 <li><label>
+				<input type="checkbox" data-bind="checked: isComplete" />
+				<span data-bind="text: title"></span>
+		  </label>
+	 </li>
+</ol>
+
+@section scripts {
+	<script type="text/javascript">
+
+		// Define a Task model
+		var Task = function (data) {
+			var self = this;
+
+			self.id = data.id;
+			self.isComplete = data.isComplete;
+			self.title = data.title;
+		};
+
+		// Define a model for the page
+		var TaskPageModel = function (tasks) {
+			this.tasks = tasks;
+		};
+
+		// Fake data
+		var taskData = [
+			new Task({ id: 1, isComplete: true, title: "Do Groceries" }),
+			new Task({ id: 2, isComplete: true, title: "Pick up dry cleaning" }),
+			new Task({ id: 3, isComplete: false, title: "Fix Jeff Z's code" })];
+
+		// Bind the data to the page
+		ko.applyBindings(new TaskPageModel(taskData));
+	</script>
+}

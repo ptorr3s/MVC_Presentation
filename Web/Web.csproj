@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="Controllers\Api\TasksController.cs" />
     <Compile Include="Models\ITaskRepository.cs" />
     <Compile Include="Models\MemoryTaskRepository.cs" />
     <Compile Include="Models\Task.cs" />

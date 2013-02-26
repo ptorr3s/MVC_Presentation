@@ -10,6 +10,7 @@ namespace Web {
 			var container = BuildUnityContainer();
 
 			DependencyResolver.SetResolver(new Unity.Mvc4.UnityDependencyResolver(container));
+			GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
 
 			return container;
 		}

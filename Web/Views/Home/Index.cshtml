@@ -28,6 +28,9 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 @section scripts {
 	<script type="text/javascript">
 
+		// Task service url
+		var serviceUrl = "@Url.HttpRouteUrl("DefaultApi", new { controller = "Tasks" })";
+
 		// Define a Task model
 		var Task = function (data) {
 			var self = this;
@@ -35,6 +38,36 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 			self.id = data.id;
 			self.isComplete = ko.observable(data.isComplete);
 			self.title = ko.observable(data.title);
+
+			this.update = function() {
+				$.ajax({
+					type: 'PUT',
+					data: ko.mapping.toJSON(self),
+					url: serviceUrl,
+					contentType: "application/json; charset=utf-8"
+				});
+			};
+
+			this.delete = function() {
+				$.ajax({
+					type: 'DELETE',
+					url: serviceUrl + "/" + self.id,
+					contentType: "application/json; charset=utf-8"
+				});
+			};
+
+			this.create = function() {
+				$.ajax({
+					type: 'POST',
+					data: ko.mapping.toJSON(self),
+					url: serviceUrl,
+					contentType: "application/json; charset=utf-8"
+				});
+			};
+
+			this.isComplete.subscribe(this.update);
+			this.title.subscribe(this.update);
+
 		};
 
 		// Define a model for the page
@@ -63,12 +96,14 @@ Title: <input type="text" data-bind="value: newTaskTitle" />
 					return;
 
 				var newTask = new Task({ id: self.tasks().length + 1, isComplete: false, title: self.newTaskTitle() });
+				newTask.create();
 
 				self.tasks.push(newTask);
 				self.newTaskTitle("");
 			};
 
 			self.removeTask = function (task) {
+				task.delete();
 				self.tasks.remove(task);
 			};
 

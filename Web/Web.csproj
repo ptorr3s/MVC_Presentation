@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.12.1\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.0.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -168,6 +171,7 @@
     <Compile Include="Controllers\Api\TasksController.cs" />
     <Compile Include="Hubs\TaskHub.cs" />
     <Compile Include="Models\CodeFirstEFRepository.cs" />
+    <Compile Include="Models\DapperRepository.cs" />
     <Compile Include="Models\ITaskRepository.cs" />
     <Compile Include="Models\MemoryTaskRepository.cs" />
     <Compile Include="Models\Task.cs" />
